@@ -8,6 +8,7 @@ const UploadPage = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [caption, setCaption] = useState<string>("");
   const [uploading, setUploading] = useState(false);
+  const [loadingCaption, setLoadingCaption] = useState(false);
   const [uploadedMemes, setUploadedMemes] = useState<UploadedMeme[]>([]);
 
   // Handle image selection
@@ -17,6 +18,41 @@ const UploadPage = () => {
       setImage(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
+  };
+
+  // Generate AI Caption
+  const generateAICaption = async () => {
+    setLoadingCaption(true);
+
+    try {
+      const res = await fetch("https://api.imgflip.com/get_memes");
+      const data = await res.json();
+
+      if (data.success) {
+        // Pick a random meme template
+        const memeTemplates = data.data.memes;
+        const randomMeme = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
+
+        // Generate a funny caption
+        const captions = [
+          "When you realize it's Monday again...",
+          "Me waiting for the weekend like...",
+          "That awkward moment when...",
+          "When your code works on the first try!",
+          "Debugging be like...",
+          "React devs after another new update drops..."
+        ];
+
+        setCaption(captions[Math.floor(Math.random() * captions.length)]);
+      } else {
+        alert("Failed to get meme templates!");
+      }
+    } catch (error) {
+      console.error("Error fetching AI caption:", error);
+      alert("Failed to generate AI caption!");
+    }
+
+    setLoadingCaption(false);
   };
 
   // Handle upload to ImgBB API
@@ -84,6 +120,15 @@ const UploadPage = () => {
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
       />
+
+      {/* Generate AI Caption */}
+      <button
+        className={`w-full py-2 mt-2 text-white rounded-lg ${loadingCaption ? "bg-gray-400" : "bg-blue-500"}`}
+        onClick={generateAICaption}
+        disabled={loadingCaption}
+      >
+        {loadingCaption ? "Generating..." : "Generate AI Caption"}
+      </button>
 
       {/* Upload Button */}
       <button
