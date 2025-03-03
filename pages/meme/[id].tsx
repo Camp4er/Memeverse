@@ -123,3 +123,132 @@ const MemeDetails = () => {
 };
 
 export default MemeDetails;
+
+
+// import { useEffect, useState } from "react";
+// import { useRouter } from "next/router";
+
+// type Meme = {
+//   id: string;
+//   imageUrl: string;
+//   caption: string;
+//   likes: number;
+//   uploader: string;
+// };
+
+// type Comment = {
+//   id: string;
+//   text: string;
+//   date: string;
+// };
+
+// const MemeDetails = () => {
+//   const router = useRouter();
+//   const { id } = router.query;
+//   const [meme, setMeme] = useState<Meme | null>(null);
+//   const [likes, setLikes] = useState<number>(0);
+//   const [comments, setComments] = useState<Comment[]>([]);
+//   const [commentText, setCommentText] = useState("");
+
+//   useEffect(() => {
+//     if (!id) return;
+
+//     // Fetch memes from local storage (or API in future)
+//     const storedMemes: Meme[] = JSON.parse(localStorage.getItem("uploadedMemes") || "[]");
+//     const foundMeme = storedMemes.find((m) => m.id === id);
+    
+//     if (foundMeme) {
+//       setMeme(foundMeme);
+//       setLikes(foundMeme.likes);
+//     }
+
+//     // Load comments from local storage
+//     const storedComments = JSON.parse(localStorage.getItem(`comments-${id}`) || "[]");
+//     setComments(storedComments);
+//   }, [id]);
+
+//   const handleLike = () => {
+//     if (!meme) return;
+
+//     const updatedLikes = likes + 1;
+//     setLikes(updatedLikes);
+
+//     // Update meme likes in local storage
+//     const storedMemes: Meme[] = JSON.parse(localStorage.getItem("uploadedMemes") || "[]");
+//     const updatedMemes = storedMemes.map((m) => (m.id === id ? { ...m, likes: updatedLikes } : m));
+//     localStorage.setItem("uploadedMemes", JSON.stringify(updatedMemes));
+//   };
+
+//   const handleAddComment = () => {
+//     if (!commentText.trim()) return;
+
+//     const newComment: Comment = {
+//       id: `${Date.now()}`,
+//       text: commentText,
+//       date: new Date().toLocaleString(),
+//     };
+
+//     const updatedComments = [...comments, newComment];
+//     setComments(updatedComments);
+//     setCommentText("");
+
+//     localStorage.setItem(`comments-${id}`, JSON.stringify(updatedComments));
+//   };
+
+//   if (!meme) return <p className="text-center text-gray-500">Meme not found!</p>;
+
+//   return (
+//     <div className="max-w-3xl mx-auto p-6">
+//       <h1 className="text-3xl font-bold text-center mb-4">{meme.caption}</h1>
+
+//       <div className="flex justify-center">
+//         <img src={meme.imageUrl} alt={meme.caption} className="rounded-lg w-full max-w-md shadow-lg" />
+//       </div>
+
+//       {/* Like Button */}
+//       <div className="flex justify-center items-center gap-3 mt-4">
+//         <button
+//           className="bg-red-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-red-600 transition"
+//           onClick={handleLike}
+//         >
+//           ❤️ {likes} Likes
+//         </button>
+//       </div>
+
+//       {/* Comments Section */}
+//       <div className="mt-6">
+//         <h2 className="text-2xl font-semibold mb-3">Comments</h2>
+//         <div className="border rounded-lg p-4">
+//           {comments.length === 0 ? (
+//             <p className="text-gray-500">No comments yet. Be the first!</p>
+//           ) : (
+//             <ul>
+//               {comments.map((comment) => (
+//                 <li key={comment.id} className="border-b last:border-none py-2">
+//                   <p>{comment.text}</p>
+//                   <span className="text-sm text-gray-500">{comment.date}</span>
+//                 </li>
+//               ))}
+//             </ul>
+//           )}
+//         </div>
+        
+//         {/* Add Comment */}
+//         <div className="mt-4 flex gap-2">
+//           <input
+//             type="text"
+//             placeholder="Add a comment..."
+//             value={commentText}
+//             onChange={(e) => setCommentText(e.target.value)}
+//             className="flex-1 border p-2 rounded-lg"
+//           />
+//           <button className="bg-blue-500 text-white px-4 py-2 rounded-lg" onClick={handleAddComment}>
+//             Submit
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default MemeDetails;
